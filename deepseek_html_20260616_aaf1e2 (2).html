@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AltumLand | Чистый ванильный Minecraft с Plasmo Voice</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0612;
+            color: #f0eaff;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f1732;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9f6ee7;
+            border-radius: 10px;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 30% 20%, #341c4e, #090312 80%);
+        }
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(166, 102, 230, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(166, 102, 230, 0.08) 1px, transparent 1px);
+            background-size: 55px 55px;
+            pointer-events: none;
+        }
+        .bg-particles::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 80%, rgba(180, 100, 255, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 1px solid rgba(156, 107, 230, 0.25);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            font-size: 2.3rem;
+            filter: drop-shadow(0 0 10px #b77eff);
+        }
+        .logo-text {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f0e6ff, #c28eff, #aa6eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #cdb9ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 1rem;
+        }
+        .nav-links a:hover {
+            color: #f0e2ff;
+            text-shadow: 0 0 4px #bc8eff;
+        }
+        .btn-outline {
+            border: 1px solid rgba(170, 110, 255, 0.6);
+            padding: 8px 20px;
+            border-radius: 40px;
+            background: rgba(35, 20, 60, 0.7);
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #cdb9ff;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-outline:hover {
+            border-color: #c48eff;
+            background: rgba(156, 107, 230, 0.2);
+            box-shadow: 0 0 12px rgba(156, 107, 230, 0.3);
+            color: white;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 80px 0 70px;
+        }
+        .hero-badge {
+            background: rgba(128, 70, 210, 0.25);
+            backdrop-filter: blur(8px);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(188, 130, 255, 0.5);
+            margin-bottom: 24px;
+            display: inline-block;
+            color: #e2caff;
+        }
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(to right, #ffffff, #e0bcff, #c48eff, #aa6eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            max-width: 900px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #cfc2f0;
+            max-width: 700px;
+            margin: 24px 0 32px;
+        }
+        
+        /* Расположение кнопок: Plasmo Voice слева, Копировать IP по центру, Discord справа */
+        .hero-buttons-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-btn-left {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .hero-btn-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .hero-btn-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(105deg, #8a4cf0, #b573ff);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 44px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 20px rgba(128, 70, 210, 0.4);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(105deg, #9f5eff, #c68aff);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(138, 76, 240, 0.5);
+        }
+        
+        /* Единый стиль для всех вторичных кнопок */
+        .btn-secondary {
+            background: #2d1f4a;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 44px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            background: #aa6eff;
+            transform: scale(1.02);
+            box-shadow: 0 0 14px #c28eff, 0 4px 12px rgba(0,0,0,0.4);
+            color: white;
+        }
+
+        .ip-card {
+            background: rgba(20, 12, 38, 0.8);
+            backdrop-filter: blur(14px);
+            border-radius: 56px;
+            padding: 18px 32px;
+            margin: 20px auto 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border: 1px solid rgba(170, 110, 255, 0.7);
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.6), 0 0 15px rgba(156, 107, 230, 0.3);
+        }
+        .ip-address {
+            font-family: 'Monaco', 'Fira Code', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: #110b1f;
+            padding: 8px 26px;
+            border-radius: 48px;
+            color: #e5caff;
+            text-shadow: 0 0 6px #aa6eff;
+            border: 1px solid #6a3daa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ip-address:hover {
+            background: #1e1438;
+            border-color: #c28eff;
+            transform: scale(1.01);
+        }
+        .copy-btn {
+            background: #2d1f4a;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 44px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .copy-btn:hover {
+            background: #aa6eff;
+            transform: scale(1.02);
+            box-shadow: 0 0 14px #c28eff, 0 4px 12px rgba(0,0,0,0.4);
+            color: white;
+        }
+        .copy-feedback {
+            font-size: 0.8rem;
+            color: #e7ccff;
+            background: #34255c;
+            padding: 4px 14px;
+            border-radius: 32px;
+            transition: opacity 0.2s;
+        }
+
+        /* БЛОК ПОДПИСКИ — РОВНОЕ РАСПОЛОЖЕНИЕ */
+        .subscription-block {
+            background: linear-gradient(145deg, #1a1230, #0f0a1f);
+            border-radius: 32px;
+            padding: 32px 28px;
+            margin: 0 auto 40px;
+            max-width: 820px;
+            border: 1px solid rgba(170, 110, 255, 0.4);
+            box-shadow: 0 0 20px rgba(138, 90, 255, 0.08);
+            text-align: center;
+        }
+        .subscription-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffecb3, #e2b6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+        .subscription-price {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #c28eff;
+            margin-bottom: 16px;
+        }
+        .subscription-price span {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #8d77b3;
+        }
+
+        /* СЕТКА ДЛЯ ПРЕИМУЩЕСТВ — 3 КОЛОНКИ РОВНО */
+        .subscription-features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .subscription-feature {
+            background: rgba(70, 40, 120, 0.3);
+            border-radius: 20px;
+            padding: 14px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid rgba(170, 110, 255, 0.2);
+            font-size: 0.95rem;
+            color: #dad0f5;
+            min-height: 56px;
+            text-align: center;
+        }
+        .subscription-feature .icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .btn-buy-subscription {
+            background: linear-gradient(105deg, #8a4cf0, #b573ff);
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 20px rgba(128, 70, 210, 0.4);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            margin-top: 4px;
+        }
+        .btn-buy-subscription:hover {
+            background: linear-gradient(105deg, #9f5eff, #c68aff);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(138, 76, 240, 0.5);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 70px 0 40px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #f2e6ff, #cd9eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+        .feature-card {
+            background: rgba(25, 17, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 32px 24px;
+            border: 1px solid rgba(160, 110, 240, 0.25);
+            transition: all 0.25s;
+            text-align: center;
+        }
+        .feature-card:hover {
+            border-color: #bd87ff;
+            transform: translateY(-6px);
+            background: rgba(45, 30, 75, 0.8);
+            box-shadow: 0 12px 25px -8px rgba(128, 70, 210, 0.4);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 4px #bd87ff);
+        }
+        .feature-card h3 {
+            font-size: 1.65rem;
+            margin-bottom: 12px;
+            color: #edd6ff;
+        }
+        .feature-card p {
+            color: #cbbdf0;
+        }
+
+        /* Главный блок с описанием */
+        .vanilla-core-block {
+            background: linear-gradient(115deg, #1f163a, #130c28);
+            border-radius: 48px;
+            padding: 48px 36px;
+            margin: 20px 0 40px;
+            border: 1px solid #8f5cdd;
+            box-shadow: 0 0 28px rgba(138, 90, 255, 0.15);
+            text-align: center;
+        }
+        .vanilla-core-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffecb3, #e2b6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .vanilla-core-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            color: #dad0f5;
+            text-align: left;
+        }
+        .vanilla-core-desc p {
+            margin-bottom: 1.2rem;
+        }
+        .vanilla-core-desc .feature-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 1.5rem 0;
+        }
+        .vanilla-core-desc .feature-list li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .vanilla-core-desc .feature-list li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            color: #c28eff;
+        }
+        .highlight {
+            color: #e1bcff;
+            font-weight: 600;
+        }
+        
+        /* Плашки с преимуществами */
+        .features-plain {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .feature-plain-item {
+            background: rgba(70, 40, 120, 0.4);
+            border-radius: 28px;
+            padding: 16px 24px;
+            width: 210px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid #8750cc;
+        }
+        .feature-plain-item strong {
+            color: #e1bcff;
+            font-size: 1.2rem;
+        }
+
+        /* Блок версии */
+        .version-block {
+            background: linear-gradient(145deg, #120c24, #0a0518);
+            border-radius: 48px;
+            padding: 40px 36px;
+            margin: 40px 0 50px;
+            border: 1px solid #6740a3;
+            text-align: center;
+        }
+        .version-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #cf9eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+        .version-label {
+            font-size: 1.2rem;
+            color: #b9a3e0;
+            margin-top: 12px;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin: 70px 0 50px;
+            background: radial-gradient(circle at 50% 0%, rgba(138, 70, 230, 0.2), transparent);
+            padding: 50px 20px;
+            border-radius: 64px;
+        }
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        footer {
+            border-top: 1px solid rgba(170, 110, 255, 0.2);
+            padding: 40px 0 30px;
+            text-align: center;
+            color: #8d77b3;
+            font-size: 0.85rem;
+        }
+
+        /* Модальные окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #1f163a, #130c28);
+            border-radius: 48px;
+            padding: 48px 36px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid #8f5cdd;
+            box-shadow: 0 0 28px rgba(138, 90, 255, 0.15);
+            text-align: center;
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #8d77b3;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            font-family: inherit;
+        }
+        .modal-close:hover {
+            color: white;
+        }
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffecb3, #e2b6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .modal-subtitle {
+            font-size: 1rem;
+            color: #cfc2f0;
+            margin-bottom: 32px;
+        }
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+        .btn-modal-support {
+            background: linear-gradient(105deg, #8a4cf0, #b573ff);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 20px rgba(128, 70, 210, 0.4);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-modal-support:hover {
+            background: linear-gradient(105deg, #9f5eff, #c68aff);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(138, 76, 240, 0.5);
+        }
+        .btn-modal-donate {
+            background: #2d1f4a;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-modal-donate:hover {
+            background: #aa6eff;
+            transform: scale(1.02);
+            box-shadow: 0 0 14px #c28eff, 0 4px 12px rgba(0,0,0,0.4);
+            color: white;
+        }
+
+        /* Модальное окно для подписки (предупреждение) */
+        .subscribe-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .subscribe-modal-overlay.active {
+            display: flex;
+        }
+        .subscribe-modal-content {
+            background: linear-gradient(145deg, #1f163a, #130c28);
+            border-radius: 48px;
+            padding: 48px 36px;
+            max-width: 500px;
+            width: 100%;
+            border: 2px solid #c28eff;
+            box-shadow: 0 0 40px rgba(138, 90, 255, 0.2);
+            text-align: center;
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+        .subscribe-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #8d77b3;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            font-family: inherit;
+        }
+        .subscribe-modal-close:hover {
+            color: white;
+        }
+        .subscribe-modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffecb3, #e2b6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .subscribe-modal-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #dad0f5;
+            margin-bottom: 28px;
+            text-align: left;
+        }
+        .subscribe-modal-text strong {
+            color: #e1bcff;
+        }
+        .btn-subscribe-go {
+            background: linear-gradient(105deg, #8a4cf0, #b573ff);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 20px rgba(128, 70, 210, 0.4);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-subscribe-go:hover {
+            background: linear-gradient(105deg, #9f5eff, #c68aff);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(138, 76, 240, 0.5);
+        }
+
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 2.4rem; }
+            .ip-address { font-size: 1.2rem; padding: 6px 16px; }
+            .ip-card { flex-direction: column; align-items: stretch; text-align: center; }
+            .navbar { flex-direction: column; }
+            .version-number { font-size: 2rem; }
+            .vanilla-core-title { font-size: 1.5rem; }
+            .feature-plain-item { width: 100%; }
+            .vanilla-core-desc { text-align: center; }
+            .vanilla-core-desc .feature-list li { text-align: left; }
+            .hero-buttons-wrapper {
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+            }
+            .hero-btn-left, .hero-btn-center, .hero-btn-right {
+                justify-content: center;
+                width: 100%;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .modal-content, .subscribe-modal-content {
+                padding: 32px 20px;
+            }
+            .modal-title, .subscribe-modal-title { font-size: 1.5rem; }
+            .subscription-block {
+                padding: 20px 16px;
+            }
+            .subscription-title { font-size: 1.3rem; }
+            .subscription-price { font-size: 1.8rem; }
+            .subscription-features-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .subscription-feature {
+                padding: 12px;
+                font-size: 0.9rem;
+                min-height: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="bg-particles"></div>
+
+<div class="container">
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">💎</span>
+            <span class="logo-text">AltumLand</span>
+        </div>
+        <div class="nav-links">
+            <a href="http://ip199-83-103-250.joinserver.xyz:25602" target="_blank" class="btn-outline">🗺️ Карта</a>
+            <button class="btn-outline" id="openSupportBtn">❤️ Поддержка сервера</button>
+            <button class="btn-outline" id="startGameBtn">🎮 Начать игру</button>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-badge">✦ ALTUMLAND | ЧИСТАЯ ВАНИЛА + PLASMO VOICE ✦</div>
+        <h1>AltumLand — Minecraft<br>с душой и голосом</h1>
+        <p>AltumLand — улучшенный Minecraft с дружелюбным сообществом, стабильной экономикой и регулярными обновлениями.</p>
+        
+        <div class="hero-buttons-wrapper">
+            <div class="hero-btn-left">
+                <a href="https://minecraft-inside.ru/mods/146041-plasmo-voice.html?ysclid=mqcvhv29pw812431754" target="_blank" class="btn-secondary">🎙️ Plasmo Voice</a>
+            </div>
+            <div class="hero-btn-center">
+                <button class="btn-primary" id="scrollToIpBtn">📋 Копировать IP</button>
+            </div>
+            <div class="hero-btn-right">
+                <a href="https://discord.gg/xYMuJPRd" target="_blank" class="btn-secondary">💬 Discord сервер</a>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <div class="ip-card" id="ipCardBlock">
+            <span class="ip-address" id="serverIp">altumland.play.ski</span>
+            <button class="copy-btn" id="copyIpButton">
+                <span>📋</span> Копировать IP
+            </button>
+            <span id="copyMessage" class="copy-feedback" style="display: none;">✅ Скопировано!</span>
+        </div>
+    </div>
+
+    <!-- БЛОК ПОДПИСКИ — ровная сетка 3 колонки -->
+    <div class="subscription-block">
+        <div class="subscription-title">🌟 Премиум подписка AltumLand</div>
+        <div class="subscription-price">199 ₽ <span>/ месяц</span></div>
+        <div class="subscription-features-grid">
+            <div class="subscription-feature">
+                <span class="icon">🐾</span> Питомцы
+            </div>
+            <div class="subscription-feature">
+                <span class="icon">✨</span> Палочка откладки
+            </div>
+            <div class="subscription-feature">
+                <span class="icon">👑</span> Значок перед ником
+            </div>
+        </div>
+        <button class="btn-buy-subscription" id="openSubscribeModalBtn">🛒 Купить подписку</button>
+    </div>
+
+    <!-- КЛЮЧЕВОЙ БЛОК С ТЕКСТОМ -->
+    <div class="vanilla-core-block">
+        <div class="vanilla-core-title">
+            🌿 Глоток свежего воздуха без перегруза 🌿
+        </div>
+        <div class="vanilla-core-desc">
+            <p>Соскучился по тем временам, когда Майнкрафт пах деревом и углем, а самым страшным мобом был крипер за углом? <strong class="highlight">AltumLand</strong> — это глоток свежего воздуха без перегруза плагинами и донат-свалок.</p>
+            <p>У нас чистый ванильный мир, где всё зависит только от твоей головы и рук.</p>
+            <ul class="feature-list">
+                <li><strong>📦 Без призм.</strong> Никаких «лвл-систем» и ключей. Просто заходи и строй.</li>
+                <li><strong>⛏ Честная экономика.</strong> Алмаз — это ценность, а не пыль под ногами.</li>
+                <li><strong>🛡 Правила для жизни.</strong> Защита от гриферов? Есть. Тотальная анархия? Нет. Мы сохраняем баланс между хардкором и уютом.</li>
+            </ul>
+            <p>Ты хочешь построить замок у реки или основать деревню? В AltumLand это будет твоим наследием. Ваниль — это не скучно, это свободно.</p>
+        </div>
+        
+        <div class="features-plain">
+            <div class="feature-plain-item"><strong>🎙️ Plasmo Voice</strong><br>Пространственный голосовой чат</div>
+            <div class="feature-plain-item"><strong>🐾 Питомцы</strong><br>Верные спутники в приключениях</div>
+            <div class="feature-plain-item"><strong>🛡️ Отличная модерация</strong><br>Быстрая помощь и порядок</div>
+            <div class="feature-plain-item"><strong>⚡ Хорошая оптимизация</strong><br>Игра без лагов и тормозов</div>
+        </div>
+    </div>
+
+    <h2 class="section-title">💜 Почему игроки выбирают AltumLand</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Дружелюбное сообщество</h3>
+            <p>Открытые игроки, активная помощь новичкам и уютная атмосфера без токсичности.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Честная экономика</h3>
+            <p>Алмаз — настоящая ценность. Продуманная система ресурсов и торговли без инфляции.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎮</div>
+            <h3>Чистая ванила</h3>
+            <p>Никаких донат-свалок и призм. Только Minecraft, который ты любишь.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚖️</div>
+            <h3>Баланс правил</h3>
+            <p>Защита от гриферов есть, но без тотальной анархии. Уют и хардкор в гармонии.</p>
+        </div>
+    </div>
+
+    <div class="version-block">
+        <div class="version-number">☕ Java 1.21.11</div>
+        <div class="version-label">Актуальная версия Minecraft на AltumLand</div>
+    </div>
+
+    <div class="cta-section">
+        <h2>✨ Присоединяйся к AltumLand ✨</h2>
+        <p style="max-width: 600px; margin: 0 auto 28px;">Построй замок у реки, основай деревню или просто выживай в компании друзей. Ваниль — это не скучно, это свободно. Твоё наследие ждёт.</p>
+        <button class="btn-primary" id="bottomCopyBtn">📋 Скопировать IP AltumLand</button>
+    </div>
+
+    <footer>
+        <p>© 2025 AltumLand — чистый ванильный Minecraft сервер с Plasmo Voice. Minecraft — торговая марка Mojang AB.</p>
+        <p style="margin-top: 8px;">🌐 IP: altumland.play.ski • Версия Java 1.21.11 • Plasmo Voice, питомцы, модерация 🎙️</p>
+    </footer>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО ПОДДЕРЖКИ (основное) -->
+<div class="modal-overlay" id="supportModal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeSupportBtn">✕</button>
+        <div class="modal-title">❤️ Поддержка сервера</div>
+        <div class="modal-subtitle">Твоя помощь помогает серверу жить и развиваться. Спасибо, что ты с нами!</div>
+        <div class="modal-buttons">
+            <a href="https://www.donationalerts.com/r/altumland" target="_blank" class="btn-modal-support">
+                ❤️ Поддержать сервер
+            </a>
+            <button class="btn-modal-donate" id="openDonateModalBtn">
+                💎 Подписка
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПОДПИСКИ (с предупреждением) -->
+<div class="subscribe-modal-overlay" id="subscribeModal">
+    <div class="subscribe-modal-content">
+        <button class="subscribe-modal-close" id="closeSubscribeModalBtn">✕</button>
+        <div class="subscribe-modal-title">💎 Внимание!</div>
+        <div class="subscribe-modal-text">
+            <p><strong>Не забудьте написать ваш никнейм при оформлении подписки!</strong></p>
+            <p style="margin-top: 12px;">Никнейм должен соответствовать вашему никнейму на сервере!</p>
+            <p style="margin-top: 12px;">При проблемах с подпиской обращайтесь к администрации в Discord сервера через <strong>тикет</strong>.</p>
+        </div>
+        <a href="https://www.donationalerts.com/r/muweli" target="_blank" class="btn-subscribe-go">
+            💎 Перейти к оформлению
+        </a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const SERVER_IP = "altumland.play.ski";
+        
+        const copyBtn = document.getElementById('copyIpButton');
+        const bottomCopyBtn = document.getElementById('bottomCopyBtn');
+        const copyMessageSpan = document.getElementById('copyMessage');
+        const scrollToIpBtn = document.getElementById('scrollToIpBtn');
+        const ipCardBlock = document.getElementById('ipCardBlock');
+        const ipSpan = document.getElementById('serverIp');
+        const startGameBtn = document.getElementById('startGameBtn');
+
+        // Модальное окно поддержки (основное)
+        const supportModal = document.getElementById('supportModal');
+        const openSupportBtn = document.getElementById('openSupportBtn');
+        const closeSupportBtn = document.getElementById('closeSupportBtn');
+
+        // Модальное окно для подписки (предупреждение)
+        const subscribeModal = document.getElementById('subscribeModal');
+        const openSubscribeModalBtn = document.getElementById('openSubscribeModalBtn');
+        const closeSubscribeModalBtn = document.getElementById('closeSubscribeModalBtn');
+
+        // Открыть основное модальное окно поддержки
+        if (openSupportBtn) {
+            openSupportBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                supportModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        // Закрыть основное модальное окно
+        if (closeSupportBtn) {
+            closeSupportBtn.addEventListener('click', () => {
+                supportModal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Закрыть основное окно по клику вне окна
+        supportModal.addEventListener('click', (e) => {
+            if (e.target === supportModal) {
+                supportModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Открыть модальное окно подписки (из основного)
+        const openDonateModalBtn = document.getElementById('openDonateModalBtn');
+        if (openDonateModalBtn) {
+            openDonateModalBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                subscribeModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        // Открыть модальное окно подписки (из блока подписки)
+        if (openSubscribeModalBtn) {
+            openSubscribeModalBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                subscribeModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        // Закрыть модальное окно подписки
+        if (closeSubscribeModalBtn) {
+            closeSubscribeModalBtn.addEventListener('click', () => {
+                subscribeModal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Закрыть окно подписки по клику вне окна
+        subscribeModal.addEventListener('click', (e) => {
+            if (e.target === subscribeModal) {
+                subscribeModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Закрыть по ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (subscribeModal.classList.contains('active')) {
+                    subscribeModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                if (supportModal.classList.contains('active')) {
+                    supportModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        async function copyServerIPToClipboard() {
+            try {
+                await navigator.clipboard.writeText(SERVER_IP);
+                showCopySuccess();
+                showToastMessage(`✅ IP "${SERVER_IP}" скопирован! Добро пожаловать на AltumLand!`);
+            } catch (err) {
+                try {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = SERVER_IP;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showCopySuccess();
+                    showToastMessage(`✅ IP "${SERVER_IP}" скопирован!`);
+                } catch (fallbackErr) {
+                    showToastMessage(`❌ Не удалось скопировать IP, попробуйте вручную.`);
+                }
+            }
+        }
+
+        function showCopySuccess() {
+            if (copyMessageSpan) {
+                copyMessageSpan.style.display = 'inline-block';
+                copyMessageSpan.style.opacity = '1';
+                setTimeout(() => {
+                    copyMessageSpan.style.opacity = '0';
+                    setTimeout(() => {
+                        copyMessageSpan.style.display = 'none';
+                        copyMessageSpan.style.opacity = '';
+                    }, 300);
+                }, 2000);
+            }
+            if (ipSpan) {
+                ipSpan.style.transform = 'scale(1.02)';
+                setTimeout(() => { if(ipSpan) ipSpan.style.transform = ''; }, 200);
+            }
+        }
+
+        function showToastMessage(msg) {
+            let toast = document.querySelector('.dynamic-toast');
+            if(!toast) {
+                toast = document.createElement('div');
+                toast.className = 'dynamic-toast';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '30px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%)';
+                toast.style.backgroundColor = '#2a1c48';
+                toast.style.backdropFilter = 'blur(20px)';
+                toast.style.padding = '12px 28px';
+                toast.style.borderRadius = '60px';
+                toast.style.color = '#f0e6ff';
+                toast.style.fontWeight = '600';
+                toast.style.border = '1px solid #c28eff';
+                toast.style.zIndex = '9999';
+                toast.style.fontSize = '0.9rem';
+                toast.style.boxShadow = '0 8px 20px rgba(0,0,0,0.5)';
+                toast.style.whiteSpace = 'nowrap';
+                toast.style.fontFamily = "'Inter', sans-serif";
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if(toast.parentNode) toast.remove();
+                }, 500);
+            }, 2400);
+        }
+
+        if (startGameBtn) {
+            startGameBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                copyServerIPToClipboard();
+            });
+        }
+
+        if (copyBtn) copyBtn.addEventListener('click', (e) => { e.preventDefault(); copyServerIPToClipboard(); });
+        if (bottomCopyBtn) bottomCopyBtn.addEventListener('click', (e) => { e.preventDefault(); copyServerIPToClipboard(); });
+        if (ipSpan) {
+            ipSpan.style.cursor = 'pointer';
+            ipSpan.addEventListener('click', (e) => { e.preventDefault(); copyServerIPToClipboard(); });
+            ipSpan.title = 'Нажмите, чтобы скопировать IP AltumLand';
+        }
+
+        if (scrollToIpBtn) {
+            scrollToIpBtn.addEventListener('click', () => {
+                if (ipCardBlock) {
+                    ipCardBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    ipCardBlock.style.transition = 'box-shadow 0.2s';
+                    ipCardBlock.style.boxShadow = '0 0 0 3px #c28eff, 0 0 0 6px rgba(170,110,255,0.3)';
+                    setTimeout(() => { if(ipCardBlock) ipCardBlock.style.boxShadow = ''; }, 1000);
+                }
+            });
+        }
+
+        const cards = document.querySelectorAll('.feature-card, .feature-plain-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transform = 'translateY(0px)';
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, { threshold: 0.1 });
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(24px)';
+            card.style.transition = 'all 0.5s ease-out';
+            observer.observe(card);
+        });
+        setTimeout(() => {
+            cards.forEach(c => {
+                if (c.getBoundingClientRect().top < window.innerHeight - 80) {
+                    c.style.opacity = '1';
+                    c.style.transform = 'translateY(0px)';
+                }
+            });
+        }, 200);
+        
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.4s';
+        window.addEventListener('load', () => { document.body.style.opacity = '1'; });
+        
+        console.log("%c🌿 AltumLand | Чистая ванила + Plasmo Voice | Версия 1.21.11 🎙️", "color: #ca9eff; font-size: 15px; font-weight: bold;");
+    })();
+</script>
+</body>
+</html>
